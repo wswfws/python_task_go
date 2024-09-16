@@ -4,6 +4,8 @@ import pygame
 import sys
 
 from config import *
+from score_counter import count_chinese_score
+from test import board9x9
 
 # Инициализация pygame
 pygame.init()
@@ -19,10 +21,12 @@ class GoBoard:
     pass_count = 0  # Количество подряд идущих пасов
     game_over = False
 
-    def __init__(self, size=BOARD_SIZE):
+    def __init__(self, size=BOARD_SIZE, board=None):
         self.size = size
-        self.board = [['.' for _ in range(size)] for _ in range(size)]  # Инициализация доски
-        self.current_player = 'X'  # Начинает игрок 'X'
+        # Инициализация доски
+        self.board = [['.' for _ in range(size)] for _ in range(size)] \
+            if board is None else board
+        self.current_player = 'B'  # Начинает игрок 'B'
 
     def is_within_bounds(self, row, col):
         """Проверка, что координаты находятся в пределах доски"""
@@ -40,24 +44,24 @@ class GoBoard:
         # Проверка на захват камней противника
         self.check_capture(row, col)
         # Смена текущего игрока
-        self.current_player = 'O' if self.current_player == 'X' else 'X'
+        self.current_player = 'W' if self.current_player == 'B' else 'B'
         return True
 
     def pass_move(self):
         """Игрок совершает пас."""
         self.pass_count += 1
-        if self.current_player == 'X':
+        if self.current_player == 'B':
             self.black_score += 1
         else:
             self.white_score += 1
-        self.current_player = 'O' if self.current_player == 'X' else 'X'
+        self.current_player = 'W' if self.current_player == 'B' else 'B'
         if self.pass_count >= 2:  # Если два игрока пасуют подряд
             self.end_game()
 
     def check_capture(self, row, col):
         """Проверка и захват камней противника"""
         color = self.board[row][col]
-        opponent_color = 'O' if color == 'X' else 'X'
+        opponent_color = 'W' if color == 'B' else 'B'
 
         def get_group(row, col):
             """Получение группы связанных камней"""
@@ -91,7 +95,7 @@ class GoBoard:
                 if self.is_within_bounds(nr, nc) and self.board[nr][nc] == opponent_color:
                     group = get_group(nr, nc)
                     if not has_liberties(group):
-                        if self.current_player == 'X':
+                        if self.current_player == 'B':
                             self.black_score += len(group)
                         else:
                             self.white_score += len(group)
@@ -130,7 +134,7 @@ class GoBoard:
             color = self.board[row][col]
             if color == ".":  # Проверяем только если есть камень
                 continue
-            stone_color = BLACK_STONE_COLOR if color == 'X' else WHITE_STONE_COLOR
+            stone_color = BLACK_STONE_COLOR if color == 'B' else WHITE_STONE_COLOR
             pygame.draw.circle(
                 surface, stone_color,
                 (half_grid + col * GRID_SIZE, half_grid + row * GRID_SIZE),
@@ -149,11 +153,12 @@ class GoBoard:
         """Завершение игры и подсчет очков."""
         self.game_over = True
         print("Игра закончена. Подсчет очков...")
+        print(count_chinese_score(self.board))
 
 
 def main():
     """Основная функция для запуска игры"""
-    board = GoBoard()
+    board = GoBoard(BOARD_SIZE, board9x9)
     running = True
     while running:
         for event in pygame.event.get():
