@@ -1,17 +1,27 @@
 from itertools import product
-
-import pygame
 import sys
 
+from loging import game_logger
+
+global BOARD_SIZE
+
+from bot import get_deep_move
 from config import *
+bordConfig = BoardConfig()
+from menu import show_menu, Settings
 from score_counter import count_chinese_score
-from test import board9x9
 
 # Инициализация pygame
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))  # Создание окна
 pygame.display.set_caption("Go Game")  # Название окна
 font = pygame.font.Font(None, FONT_SIZE)
+
+pass_button_rect = pygame.Rect(
+    WINDOW_WIDTH - 100 - bordConfig.GRID_SIZE() // 2,
+    WINDOW_HEIGHT - 40 - bordConfig.GRID_SIZE() // 2,
+    100, 40
+)
 
 
 class GoBoard:
@@ -21,7 +31,7 @@ class GoBoard:
     pass_count = 0  # Количество подряд идущих пасов
     game_over = False
 
-    def __init__(self, size=BOARD_SIZE, board=None):
+    def __init__(self, size, board=None):
         self.size = size
         # Инициализация доски
         self.board = [['.' for _ in range(size)] for _ in range(size)] \
@@ -37,6 +47,7 @@ class GoBoard:
         if not self.is_within_bounds(row, col) or self.board[row][col] != '.':
             return False
 
+        game_logger.info(f"{self.current_player}: ({row}, {col})")
         self.pass_count = 0
 
         # Помещение камня на доску
@@ -106,7 +117,7 @@ class GoBoard:
         """Оптимизированная отрисовка доски, очков и камней на экране"""
         surface.fill(BACKGROUND_COLOR)  # Установка фона
 
-        half_grid = GRID_SIZE // 2
+        half_grid = bordConfig.GRID_SIZE() // 2
         window_end = WINDOW_WIDTH - half_grid
 
         self.draw_lines(half_grid, surface, window_end)
@@ -117,7 +128,7 @@ class GoBoard:
     def draw_lines(self, half_grid, surface, window_end):
         """Рисование линий"""
         for i in range(self.size):
-            pos = half_grid + i * GRID_SIZE
+            pos = half_grid + i * bordConfig.GRID_SIZE()
             pygame.draw.line(surface, LINE_COLOR, (half_grid, pos), (window_end, pos), LINE_WIDTH)
             pygame.draw.line(surface, LINE_COLOR, (pos, half_grid), (pos, window_end), LINE_WIDTH)
 
@@ -130,15 +141,15 @@ class GoBoard:
 
     def draw_stones(self, half_grid, surface):
         """Рисование камней"""
-        for (row, col) in product(range(BOARD_SIZE), repeat=2):
+        for (row, col) in product(range(self.size), repeat=2):
             color = self.board[row][col]
             if color == ".":  # Проверяем только если есть камень
                 continue
             stone_color = BLACK_STONE_COLOR if color == 'B' else WHITE_STONE_COLOR
             pygame.draw.circle(
                 surface, stone_color,
-                (half_grid + col * GRID_SIZE, half_grid + row * GRID_SIZE),
-                STONE_RADIUS
+                (half_grid + col * bordConfig.GRID_SIZE(), half_grid + row * bordConfig.GRID_SIZE()),
+                bordConfig.STONE_RADIUS()
             )
 
     def draw_buttons(self, half_grid, surface):
@@ -156,9 +167,11 @@ class GoBoard:
         print(count_chinese_score(self.board))
 
 
-def main():
-    """Основная функция для запуска игры"""
-    board = GoBoard(BOARD_SIZE, board9x9)
+def main(settings: Settings):
+    """
+    :param settings: Settings
+    Основная функция для запуска игры"""
+    board = GoBoard(settings.bord_size)
     running = True
     while running:
         for event in pygame.event.get():
@@ -168,10 +181,11 @@ def main():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
-                row = y // GRID_SIZE
-                col = x // GRID_SIZE
-                if 0 <= row < BOARD_SIZE and 0 <= col < BOARD_SIZE:
-                    board.place_stone(row, col)
+                row = y // bordConfig.GRID_SIZE()
+                col = x // bordConfig.GRID_SIZE()
+                if 0 <= row < settings.bord_size and 0 <= col < settings.bord_size:
+                    if board.place_stone(row, col) and settings.state == "single":
+                        board.place_stone(*get_deep_move(board.board, board.current_player))
 
                 if pass_button_rect.collidepoint(event.pos):
                     board.pass_move()
@@ -185,4 +199,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    settings = show_menu()
+    bordConfig.BOARD_SIZE = settings.bord_size
+    if settings.state == "exit":
+        exit()
+    main(settings)
