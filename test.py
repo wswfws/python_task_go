@@ -70,9 +70,7 @@ class TestGoGame(unittest.TestCase):
         self.assertEqual(score_counter.count_chinese_score(self.game_logic.board)[0], 12)
         self.assertEqual(score_counter.count_chinese_score(self.game_logic.board)[1], 2)
 
-
-
-
+    # Какие-то траблы с подсчетом, хотя в GUI всё работает...
     def test_score_count_filled_captured_easy(self):
         """Проверка счёта на доске с захватом чужих камней"""
         self.game_logic = GoGameLogic(9, self.board_config, import_board("board9x9_captured_easy"))
@@ -86,7 +84,6 @@ class TestGoGame(unittest.TestCase):
         self.game_logic.end_game()
         self.assertEqual(score_counter.count_chinese_score(self.game_logic.board)[0], 12)
         self.assertEqual(score_counter.count_chinese_score(self.game_logic.board)[1], 19)
-
 
 
 if __name__ == '__main__':
