@@ -1,6 +1,5 @@
 import unittest
 import copy
-import random
 import bot
 import test_boards as boards
 
