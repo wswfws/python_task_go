@@ -59,6 +59,5 @@ class TestGoGameFunctions(unittest.TestCase):
         self.assertIn(result, bot.get_possible_moves(board))
 
 
-
-
-
+if __name__ == '__main__':
+    unittest.main()
