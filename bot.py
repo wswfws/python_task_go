@@ -17,8 +17,8 @@ def get_possible_moves(bord):
     return possible_moves
 
 
-def get_random_move(bord, player):
-    moves = get_possible_moves(bord)
+def get_random_move(board):
+    moves = get_possible_moves(board)
     return random.choice(moves)
 
 
@@ -47,7 +47,7 @@ def get_deep_move(board, player, deep=2, alpha=-float('inf'), beta=float('inf'))
 
     # Сортируем ходы для более раннего отсечения
     moves = sorted(moves, key=lambda move: heuristic_move(board, move, player), reverse=True)
-    best_move = (alpha, get_random_move(board, player))  # Инициализация лучшего хода
+    best_move = (alpha, get_random_move(board))  # Инициализация лучшего хода
 
     for move in moves:
         if deep == 1:

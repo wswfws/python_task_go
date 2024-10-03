@@ -63,28 +63,30 @@ class GoGameLogic:
     def check_capture(self, row, col, opponent_color):
         """Проверка и захват камней противника"""
 
-        def get_group(row, col):
+        def get_group(start_row, start_col):
             """Получение группы связанных камней"""
-            _color = self.board[row][col]
-            group = set()
-            stack = [(row, col)]
+            _color = self.board[start_row][start_col]
+            connected_stones = set()
+            stack = [(start_row, start_col)]
             while stack:
-                r, c = stack.pop()
-                if (r, c) in group:
+                group_row, group_col = stack.pop()
+                if (group_row, group_col) in connected_stones:
                     continue
-                group.add((r, c))
-                for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                    nr, nc = r + dr, c + dc
-                    if self.is_in_bounds(nr, nc) and self.board[nr][nc] == _color and (nr, nc) not in group:
-                        stack.append((nr, nc))
-            return group
+                connected_stones.add((group_row, group_col))
+                for delta_row, delta_col in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                    new_row, new_col = group_row + delta_row, group_col + delta_col
+                    if (self.is_in_bounds(new_row, new_col)
+                            and self.board[new_row][new_col] == _color
+                            and (new_row, new_col) not in connected_stones):
+                        stack.append((new_row, new_col))
+            return connected_stones
 
-        def has_liberties(group):
+        def has_liberties(stone_group):
             """Проверка наличия свободных точек у группы"""
-            for r, c in group:
-                for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                    nr, nc = r + dr, c + dc
-                    if self.is_in_bounds(nr, nc) and self.board[nr][nc] == '.':
+            for group_row, group_col in stone_group:
+                for delta_row, delta_col in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                    new_row, new_col = group_row + delta_row, group_col + delta_col
+                    if self.is_in_bounds(new_row, new_col) and self.board[new_row][new_col] == '.':
                         return True
             return False
 
@@ -121,5 +123,3 @@ class GoGameLogic:
         print("Игра закончена. Подсчет очков...")
         print("Очки черных:", self.black_score)
         print("Очки белых:", self.white_score)
-
-

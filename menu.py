@@ -16,12 +16,12 @@ start_button_rect_exit = pygame.Rect(10, 110, 200, 40)
 
 
 class StartMenu:
-    pygame.init()
-    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))  # Создание окна
-    pygame.display.set_caption("Go Game menu")  # Название окна
-    font = pygame.font.Font(None, FONT_SIZE)
-
-    get_bord_size_input = InputBox(10, 210, 100, 40, "9")
+    def __init__(self):
+        pygame.init()
+        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))  # Создание окна
+        pygame.display.set_caption("Go Game menu")  # Название окна
+        self.font = pygame.font.Font(None, FONT_SIZE)
+        self.get_bord_size_input = InputBox(10, 210, 100, 40, "9")
 
     def draw(self):
         """Оптимизированная отрисовка доски, очков и камней на экране"""

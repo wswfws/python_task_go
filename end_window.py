@@ -58,10 +58,6 @@ class End:
 
 
 def show_end(black_score, white_score):
-    """
-    show start menu
-    :return: Settings
-    """
     end = End(black_score, white_score)
 
     running = True
