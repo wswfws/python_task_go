@@ -34,17 +34,19 @@ class GoGameLogic:
 
         # Помещение камня на доску
         self.board[row][col] = self.current_player
+
+        # Конец игры, если вся доска заполнена камнями
+        sum_empty = sum(row.count('.') for row in self.board)
+        if sum_empty == 0:
+            self.end_game()
+
         # Проверка на захват камней противника
         self.check_capture(row, col, self.current_player)
+
         # Смена текущего игрока
         self.current_player = 'W' if self.current_player == 'B' else 'B'
         self.check_capture(row, col, self.current_player)
 
-        s_b = sum(row.count('B') for row in self.board)
-        s_w = sum(row.count("W") for row in self.board)
-        if s_b == (len(self.board) * len(self.board[0]) - 1) or s_w == (len(self.board) * len(self.board[0]) - 1):
-            print("Досрочное завершение из-за отсутствия путей отхода.")
-            self.end_game()
         return True
 
     def pass_move(self):
