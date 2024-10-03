@@ -1,8 +1,8 @@
 import unittest
-import config
+import configuration as cfg
 
 from unittest.mock import MagicMock, patch
-from GoGame import GoGameGUI
+from go_game_gui import GoGameGUI
 
 
 class TestGoGameGUI(unittest.TestCase):
@@ -37,6 +37,36 @@ class TestGoGameGUI(unittest.TestCase):
         self.gui = GoGameGUI(self.mock_game_logic, self.mock_surface)
 
     @patch('pygame.draw.line')
+    @patch('pygame.draw.circle')
+    @patch('pygame.font.Font')
+    @patch('pygame.draw.rect')
+    def test_draw(self, mock_draw_rect, mock_font_class, mock_draw_circle, mock_draw_line):
+        """Проверка draw - вызывает ли все функции GUI"""
+
+        # Мок для текста (scores и кнопки)
+        mock_font = mock_font_class.return_value
+        mock_font.render.return_value = MagicMock()
+
+        # Вызываем основную функцию отрисовки
+        self.gui.draw()
+
+        # Проверка вызовов для отрисовки линий
+        self.assertEqual(mock_draw_line.call_count, 2 * self.mock_game_logic.size)
+
+        # Проверка вызовов для отрисовки камней
+        self.assertEqual(mock_draw_circle.call_count, 4)  # Мы знаем, что на доске 4 камня
+
+        # Проверка вызовов для отрисовки текстов (очков игроков)
+        mock_font.render.assert_any_call('Черные: 10', True, cfg.TEXT_COLOR)
+        mock_font.render.assert_any_call('Белые: 15', True, cfg.TEXT_COLOR)
+
+        # Проверка вызовов для отрисовки кнопки
+        mock_draw_rect.assert_called_once()
+
+        # Убедимся, что `blit` вызван для текстов очков и кнопки
+        self.assertGreaterEqual(self.mock_surface.blit.call_count, 3)  # Два для очков, один для кнопки
+
+    @patch('pygame.draw.line')
     def test_draw_lines(self, mock_draw_line):
         """Проверка draw_lines - верное рисование линий поля и вызова pygame.draw.line"""
         half_grid = 20
@@ -61,25 +91,25 @@ class TestGoGameGUI(unittest.TestCase):
         # (x, y) = (half_grid + x * GRID_SIZE, half_grid + y * GRID_SIZE)
         # На позиции (1, 1) (то же самое, что (60, 60)) в таблице стоит черный камень с STONE_RADIUS = 3
         mock_draw_circle.assert_any_call(
-            self.mock_surface, config.BLACK_STONE_COLOR,
+            self.mock_surface, cfg.BLACK_STONE_COLOR,
             (60, 60), 3     # позиции камня B на (1,1)
         )
 
         # B на (2, 4)
         mock_draw_circle.assert_any_call(
-            self.mock_surface, config.BLACK_STONE_COLOR,
+            self.mock_surface, cfg.BLACK_STONE_COLOR,
             (180, 100), 3
         )
 
         # Аналогично прошлому для камня W на позиции (1,7)
         mock_draw_circle.assert_any_call(
-            self.mock_surface, config.WHITE_STONE_COLOR,
+            self.mock_surface, cfg.WHITE_STONE_COLOR,
             (300, 60), 3
         )
 
         # W на (2, 4)
         mock_draw_circle.assert_any_call(
-            self.mock_surface, config.WHITE_STONE_COLOR,
+            self.mock_surface, cfg.WHITE_STONE_COLOR,
             (180, 180), 3
         )
 
@@ -93,8 +123,8 @@ class TestGoGameGUI(unittest.TestCase):
         self.gui.draw_scores(half_grid)
 
         # Вызван ли ендер текста для очков черных и белых
-        mock_font.render.assert_any_call('Черные: 10', True, config.TEXT_COLOR)
-        mock_font.render.assert_any_call('Белые: 15', True, config.TEXT_COLOR)
+        mock_font.render.assert_any_call('Черные: 10', True, cfg.TEXT_COLOR)
+        mock_font.render.assert_any_call('Белые: 15', True, cfg.TEXT_COLOR)
 
         # Вызван ли blit (рисовка на поверхности) для обоих текстов
         self.assertEqual(self.mock_surface.blit.call_count, 2)
@@ -113,7 +143,7 @@ class TestGoGameGUI(unittest.TestCase):
         mock_draw_rect.assert_called_once()
 
         # Отрендерен ли текст для кнопки
-        mock_font.render.assert_called_once_with("Пас", True, config.TEXT_COLOR)
+        mock_font.render.assert_called_once_with("Пас", True, cfg.TEXT_COLOR)
 
         # Вызван ли blit для текста на кнопке
         self.assertEqual(self.mock_surface.blit.call_count, 1)

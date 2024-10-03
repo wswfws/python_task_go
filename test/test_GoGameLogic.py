@@ -1,8 +1,8 @@
 import unittest
 import test_boards as boards
 
-from GoGame import GoGameLogic
-from config import BoardConfig
+from go_game_logic import GoGameLogic
+from configuration import BoardConfig
 from copy import deepcopy
 
 

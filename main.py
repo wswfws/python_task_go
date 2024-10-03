@@ -1,24 +1,24 @@
 import sys
+import pygame
+import configuration as cfg
 
-from GoGame import GoGameLogic, GoGameGUI
+from go_game_logic import GoGameLogic
+from go_game_gui import GoGameGUI
+from bot import get_deep_move
+from menu import show_menu, Settings
 
 global BOARD_SIZE
 
-from bot import get_deep_move
-from config import *
-
-bordConfig = BoardConfig()
-from menu import show_menu, Settings
-
+bordConfig = cfg.BoardConfig()
 
 # Инициализация pygame
 pygame.init()
-screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))  # Создание окна
+screen = pygame.display.set_mode((cfg.WINDOW_WIDTH, cfg.WINDOW_HEIGHT))  # Создание окна
 pygame.display.set_caption("Go Game")  # Название окна
 
 pass_button_rect = pygame.Rect(
-    WINDOW_WIDTH - 100 - bordConfig.GRID_SIZE() // 2,
-    WINDOW_HEIGHT - 40 - bordConfig.GRID_SIZE() // 2,
+    cfg.WINDOW_WIDTH - 100 - bordConfig.GRID_SIZE() // 2,
+    cfg.WINDOW_HEIGHT - 40 - bordConfig.GRID_SIZE() // 2,
     100, 40
 )
 

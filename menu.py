@@ -1,7 +1,14 @@
+import pygame
 from dataclasses import dataclass
-
-from InputBox import InputBox
-from config import *
+from input_box import InputBox
+from configuration import (
+    WINDOW_WIDTH,
+    WINDOW_HEIGHT,
+    FONT_SIZE,
+    BUTTON_COLOR,
+    TEXT_COLOR,
+    BACKGROUND_COLOR,
+    RED)
 
 start_button_rect_single = pygame.Rect(10, 10, 200, 40)
 start_button_rect_multi = pygame.Rect(10, 60, 200, 40)
@@ -23,7 +30,6 @@ class StartMenu:
         self.draw_buttons()
         self.draw_settings()
 
-
     def handle_event(self, event):
         self.get_bord_size_input.handle_event(event)
 
@@ -34,7 +40,6 @@ class StartMenu:
         black_text = self.font.render(f'Размер Поля', True, TEXT_COLOR)
         self.screen.blit(black_text, (10, 160))
         self.get_bord_size_input.draw(self.screen)
-
 
     def draw_buttons(self):
         """Отрисовка кнопок"""

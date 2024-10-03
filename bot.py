@@ -1,8 +1,8 @@
 import random
 import copy
 
-from GoGame import GoGameLogic
-from config import BoardConfig
+from go_game_logic import GoGameLogic
+from configuration import BoardConfig
 from score_counter import count_chinese_score
 
 

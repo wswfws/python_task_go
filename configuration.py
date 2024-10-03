@@ -1,6 +1,3 @@
-# импорты
-import pygame
-
 # Настройки
 WINDOW_WIDTH = 450
 WINDOW_HEIGHT = 500

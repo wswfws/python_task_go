@@ -1,13 +1,13 @@
-from config import *
+import pygame
+import configuration as cfg
 
 
 class InputBox:
-
     def __init__(self, x, y, w, h, text=''):
         self.rect = pygame.Rect(x, y, w, h)
-        self.color = BUTTON_COLOR
+        self.color = cfg.BUTTON_COLOR
         self.text = text
-        self.FONT = pygame.font.Font(None, FONT_SIZE)
+        self.FONT = pygame.font.Font(None, cfg.FONT_SIZE)
         self.txt_surface = self.FONT.render(text, True, self.color)
         self.active = False
 
@@ -20,7 +20,7 @@ class InputBox:
             else:
                 self.active = False
             # Change the current color of the input box.
-            self.color = TEXT_COLOR if self.active else BUTTON_COLOR
+            self.color = cfg.TEXT_COLOR if self.active else cfg.BUTTON_COLOR
         if event.type == pygame.KEYDOWN:
             if self.active:
                 if event.key == pygame.K_RETURN:
@@ -43,4 +43,3 @@ class InputBox:
         screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
         # Blit the rect.
         pygame.draw.rect(screen, self.color, self.rect, 2)
-
