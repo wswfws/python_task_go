@@ -17,6 +17,7 @@ class BoardConfig:
 LINE_WIDTH = 2  # Толщина линий сетки
 STONE_WIDTH = 15  # Толщина камня
 FONT_SIZE = 32
+FONT_SIZE_END = 50
 
 # Цвета
 

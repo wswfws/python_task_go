@@ -6,6 +6,7 @@ from go_game_logic import GoGameLogic
 from go_game_gui import GoGameGUI
 from bot import get_deep_move
 from menu import show_menu, Settings
+from end_window import show_end
 
 global BOARD_SIZE
 
@@ -47,6 +48,7 @@ def main(_settings: Settings):
                     board_logic.pass_move()
 
         if board_logic.game_over:
+            show_end(board_logic.black_score, board_logic.white_score)
             pygame.quit()
             sys.exit()
 

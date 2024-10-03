@@ -116,7 +116,10 @@ class GoGameLogic:
     def end_game(self):
         """Завершение игры и подсчет очков."""
         self.game_over = True
+        self.black_score = count_chinese_score(self.board)[0]
+        self.white_score = count_chinese_score(self.board)[1]
         print("Игра закончена. Подсчет очков...")
-        print("Очки черных:", count_chinese_score(self.board)[0])
-        print("Очки белых:", count_chinese_score(self.board)[1])
+        print("Очки черных:", self.black_score)
+        print("Очки белых:", self.white_score)
+
 
