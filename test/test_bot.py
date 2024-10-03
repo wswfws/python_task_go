@@ -22,7 +22,7 @@ class TestGoGameFunctions(unittest.TestCase):
     def test_get_possible_moves_quality(self):
         """Проверка получения всех возможных ходов, по содержанию"""
         board = boards.board3x3
-        move = bot.get_random_move(board, 'B')
+        move = bot.get_random_move(board)
         possible_moves = [(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1)]
         self.assertIn(move, possible_moves)
 
@@ -31,7 +31,7 @@ class TestGoGameFunctions(unittest.TestCase):
         board = [['.'] * 9 for _ in range(self.board_size)]
         board[6][6] = 'W'
         moves = bot.get_possible_moves(board)
-        move = bot.get_random_move(board, 'B')
+        move = bot.get_random_move(board)
         self.assertIn(move, moves)
 
     def test_heuristic_move(self):
