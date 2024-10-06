@@ -32,7 +32,7 @@ class TestGoGame(unittest.TestCase):
         self.game_logic = GoGameLogic(self.board_size, self.board_config)
         self.assertEqual(self.game_logic.place_stone(-1, -5), False)
 
-    def test_pass_move(self):
+    def test_pass_move_B(self):
         """Проверка "паса" """
         self.game_logic = GoGameLogic(self.board_size, self.board_config)
         self.game_logic.pass_move()
@@ -40,6 +40,16 @@ class TestGoGame(unittest.TestCase):
         self.assertEqual(self.game_logic.white_score, 0)
         self.game_logic.end_game()
         self.assertEqual(self.game_logic.current_player, 'W')
+
+    def test_pass_move_W(self):
+        """Проверка "паса" """
+        self.game_logic = GoGameLogic(self.board_size, self.board_config)
+        self.game_logic.current_player = 'W'
+        self.game_logic.pass_move()
+        self.assertEqual(self.game_logic.black_score, 0)
+        self.assertEqual(self.game_logic.white_score, 1)
+        self.game_logic.end_game()
+        self.assertEqual(self.game_logic.current_player, 'B')
 
     def test_end_game(self):
         """Проверка завершения игры"""
@@ -55,6 +65,18 @@ class TestGoGame(unittest.TestCase):
         self.game_logic.end_game()
         self.assertEqual(self.game_logic.board[1][1], 'B')
         self.assertEqual(self.game_logic.current_player, 'W')
+
+    def test_one_empty_cell(self):
+        self.game_logic = GoGameLogic(3, self.board_config, deepcopy(boards.board3x3_one_empty))
+        self.game_logic.place_stone(1, 0)
+        self.game_logic.place_stone(2, 0)
+        self.assertTrue(self.game_logic.game_over)
+
+    def test_two_pass(self):
+        self.game_logic = GoGameLogic(self.board_size, self.board_config)
+        self.game_logic.pass_move()
+        self.game_logic.pass_move()
+        self.assertTrue(self.game_logic.game_over)
 
 
 if __name__ == '__main__':

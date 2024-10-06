@@ -64,7 +64,6 @@ def get_deep_move(board, player, deep=2, alpha=-float('inf'), beta=float('inf'))
             next_move_score = get_deep_move(new_board.board, next_player, deep - 1, -beta, -alpha)
             if next_move_score is None:
                 continue
-
             score = -next_move_score[0]  # Инвертируем оценку, так как ходы чередуются
 
         # Обновляем лучший ход, если текущий ход лучше

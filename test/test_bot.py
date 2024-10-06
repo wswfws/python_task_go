@@ -58,6 +58,16 @@ class TestGoGameFunctions(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertIn(result, bot.get_possible_moves(board))
 
+    def test_get_deep_move_next_score_is_none(self):
+        """Проверка корректной обработки случая, когда next_move_score равен None"""
+        board = [['.'] * 9 for _ in range(9)]
+        player = 'B'
 
+        # Имитация вызова get_deep_move с глубиной 2
+        deep_move = bot.get_deep_move(board, player, deep=2, alpha=-float('inf'), beta=float('inf'))
+
+        # Проверяем, что функция не выбрасывает исключение и продолжает выполнение
+        self.assertIsNotNone(deep_move)
+        
 if __name__ == '__main__':
     unittest.main()
