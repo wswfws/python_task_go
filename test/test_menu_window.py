@@ -1,8 +1,9 @@
 import unittest
 from unittest.mock import patch, MagicMock
 import pygame
-from menu_window import StartMenu, show_menu, Settings  # Импортируйте класс и функцию из вашего файла
+from menu_window import StartMenu, show_menu, Settings
 import input_box
+
 
 class TestStartMenu(unittest.TestCase):
 
@@ -19,6 +20,12 @@ class TestStartMenu(unittest.TestCase):
     def test_get_bord_size(self):
         self.menu.get_bord_size_input.text = '5'
         self.assertEqual(self.menu.get_bord_size(), '5')
+
+    def test_draw(self):
+        try:
+            self.menu.draw()
+        except Exception as e:
+            self.fail(f"draw_settings raised an exception: {e}")
 
     def test_draw_settings(self):
         # Call draw_settings method

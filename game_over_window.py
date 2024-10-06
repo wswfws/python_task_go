@@ -70,7 +70,3 @@ def show_end(black_score, white_score):
 
         end.draw()
         pygame.display.flip()
-
-
-# if __name__ == "__main__":
-#     show_end(5, 5)

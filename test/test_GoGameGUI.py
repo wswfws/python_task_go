@@ -12,7 +12,6 @@ class TestGoGameGUI(unittest.TestCase):
         self.mock_surface = MagicMock()
 
         # Параметры для game_logic и bordConfig
-        self.mock_game_gui.board_size = 9   # Размер доски 9x9
         self.mock_game_gui.black_score = 10
         self.mock_game_gui.white_score = 15
         self.mock_game_gui.board = [
@@ -31,6 +30,7 @@ class TestGoGameGUI(unittest.TestCase):
         self.mock_bordConfig = MagicMock()
         self.mock_bordConfig.GRID_CELL_SIZE.return_value = 40
         self.mock_bordConfig.STONE_RADIUS.return_value = 3
+        self.mock_bordConfig.BOARD_SIZE = 9
         self.mock_game_gui.bordConfig = self.mock_bordConfig
 
         # Экземпляр GUI с мок-объектами
