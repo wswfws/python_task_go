@@ -1,4 +1,5 @@
 import sys
+import webbrowser
 import pygame
 import configuration as cfg
 
@@ -8,8 +9,6 @@ from bot import get_deep_move
 from menu import show_menu, Settings
 from end_window import show_end
 
-global BOARD_SIZE
-
 bordConfig = cfg.BoardConfig()
 
 # Инициализация pygame
@@ -18,10 +17,18 @@ screen = pygame.display.set_mode((cfg.WINDOW_WIDTH, cfg.WINDOW_HEIGHT))  # Со�
 pygame.display.set_caption("Go Game")  # Название окна
 
 pass_button_rect = pygame.Rect(
-    cfg.WINDOW_WIDTH - 100 - bordConfig.GRID_SIZE() // 2,
-    cfg.WINDOW_HEIGHT - 40 - bordConfig.GRID_SIZE() // 2,
-    100, 40
+    cfg.WINDOW_WIDTH // 2 - 50,
+    max(bordConfig.GRID_CELL_SIZE() * bordConfig.BOARD_SIZE, cfg.WINDOW_HEIGHT - 50 - 25 - 50),
+    50 * 2, 50
 )
+
+question_button_rect = pygame.Rect(
+    cfg.WINDOW_WIDTH - 25 - 50,
+    max(bordConfig.GRID_CELL_SIZE() * bordConfig.BOARD_SIZE, cfg.WINDOW_HEIGHT - 50 - 25 - 50),
+    50, 50
+)
+
+game_rules_rect = pygame.Rect(0, cfg.WINDOW_HEIGHT - 50, cfg.WINDOW_WIDTH, 25)
 
 
 def main(_settings: Settings):
@@ -38,14 +45,21 @@ def main(_settings: Settings):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
-                row = y // bordConfig.GRID_SIZE()
-                col = x // bordConfig.GRID_SIZE()
+                row = y // bordConfig.GRID_CELL_SIZE()
+                col = x // bordConfig.GRID_CELL_SIZE()
                 if 0 <= row < _settings.bord_size and 0 <= col < _settings.bord_size:
                     if board_logic.place_stone(row, col) and _settings.state == "single":
                         board_logic.place_stone(*get_deep_move(board_logic.board, board_logic.current_player))
 
                 if pass_button_rect.collidepoint(event.pos):
                     board_logic.pass_move()
+
+                if question_button_rect.collidepoint(event.pos):
+                    board_gui.show_help = True
+                    pygame.display.flip()
+
+                if game_rules_rect.collidepoint(event.pos) and board_gui.show_help:
+                    webbrowser.open("https://ufgo.org/Rules9x9/Go%20Rules%209x9.htm")
 
         if board_logic.game_over:
             show_end(board_logic.black_score, board_logic.white_score)

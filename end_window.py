@@ -48,9 +48,9 @@ class End:
         # ПРЯМОУГОЛЬНИК "ПОБЕДА <player>"
         pygame.draw.rect(self.screen, cfg.BUTTON_COLOR, self.winner_rect)  # Рисуем прямоугольник
         if self.white_score < self.black_score:
-            text_surface = self.font.render("Победа чёрных", True, cfg.TEXT_COLOR)
+            text_surface = self.font.render("Победа чёрных", True, cfg.BLACK)
         elif self.white_score > self.black_score:
-            text_surface = self.font.render("Победа белых", True, cfg.TEXT_COLOR)
+            text_surface = self.font.render("Победа белых", True, cfg.WHITE)
         else:
             text_surface = self.font.render("Ничья", True, cfg.TEXT_COLOR)
         text_rect = text_surface.get_rect(center=self.winner_rect.center)

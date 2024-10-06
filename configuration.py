@@ -1,17 +1,17 @@
 # Настройки
 WINDOW_WIDTH = 450
-WINDOW_HEIGHT = 500
+WINDOW_HEIGHT = 570
 
 
 class BoardConfig:
     def __init__(self):
         self.BOARD_SIZE = 9
 
-    def GRID_SIZE(self):
+    def GRID_CELL_SIZE(self):
         return WINDOW_WIDTH // self.BOARD_SIZE
 
     def STONE_RADIUS(self):
-        return self.GRID_SIZE() // 3  # Радиус камня
+        return self.GRID_CELL_SIZE() // 3  # Радиус камня
 
 
 LINE_WIDTH = 2  # Толщина линий сетки
@@ -31,3 +31,4 @@ TEXT_COLOR = BLACK
 BUTTON_COLOR = (128, 128, 128)
 BLACK_STONE_COLOR = BLACK  # Цвет черного камня
 WHITE_STONE_COLOR = WHITE  # Цвет белого камня
+LINK_COLOR = (5, 58, 145)
