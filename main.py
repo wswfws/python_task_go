@@ -6,8 +6,8 @@ import configuration as cfg
 from go_game_logic import GoGameLogic
 from go_game_gui import GoGameGUI
 from bot import get_deep_move
-from menu import show_menu, Settings
-from end_window import show_end
+from menu_window import show_menu, Settings
+from game_over_window import show_end
 
 bordConfig = cfg.BoardConfig()
 

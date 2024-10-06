@@ -103,7 +103,3 @@ class GoGameGUI:
         text_surface = font.render("P. S.: Для завершения игры два игрока должны спасовать", True, cfg.TEXT_COLOR)
         text_rect = text_surface.get_rect(center=rect.center)
         self.surface.blit(text_surface, text_rect)
-
-    def paint_over_help(self):
-        rect = pygame.Rect(0, cfg.WINDOW_HEIGHT - 50, cfg.WINDOW_WIDTH, 50)
-        pygame.draw.rect(self.surface, cfg.BACKGROUND_COLOR, rect)

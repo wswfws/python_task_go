@@ -66,6 +66,7 @@ class TestGoGameGUI(unittest.TestCase):
         # Убедимся, что `blit` вызван для текстов очков и кнопки
         self.assertGreaterEqual(self.mock_surface.blit.call_count, 4)  # Два для очков, один для кнопки
 
+
     @patch('pygame.draw.line')
     def test_draw_lines(self, mock_draw_line):
         """Проверка draw_lines - верное рисование линий поля и вызова pygame.draw.line"""
@@ -132,7 +133,7 @@ class TestGoGameGUI(unittest.TestCase):
     @patch('pygame.draw.rect')
     @patch('pygame.font.Font')
     def test_draw_buttons(self, mock_font_class, mock_draw_rect):
-        """Проверка правильности отрисовки кнопки ПАС"""
+        """Проверка правильности отрисовки кнопки ПАС и ?"""
         mock_font = mock_font_class.return_value
         mock_font.render.return_value = MagicMock()  # Мок для текста
 
@@ -150,6 +151,29 @@ class TestGoGameGUI(unittest.TestCase):
         mock_font.render.has_calls(expected_calls, any_order=True)
         # Вызван ли blit для текста на кнопке
         self.assertEqual(self.mock_surface.blit.call_count, 2)
+
+
+    @patch('pygame.draw.rect')
+    @patch('pygame.font.Font')
+    def test_draw_help(self, mock_font_class, mock_draw_rect):
+        """Проверка правильности отрисовки кнопки правил"""
+        mock_font = mock_font_class.return_value
+        mock_font.render.return_value = MagicMock()  # Мок для текста
+
+        self.gui.draw_help()
+
+        # Вызван ли метод отрисовки прямоугольников (кнопок)
+        self.assertEqual(mock_draw_rect.call_count, 2)
+
+        expected_calls = [
+            call("Правила игры", True, cfg.LINK_COLOR),
+            call("P. S.: Для завершения игры два игрока должны спасовать", True, cfg.TEXT_COLOR)
+        ]
+        # Отрендерен ли текст для кнопки
+        mock_font.render.has_calls(expected_calls, any_order=True)
+        # Вызван ли blit для текста на кнопке
+        self.assertEqual(self.mock_surface.blit.call_count, 2)
+
 
 
 if __name__ == '__main__':
