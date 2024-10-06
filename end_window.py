@@ -12,9 +12,9 @@ class End:
         self.font = pygame.font.Font(None, cfg.FONT_SIZE_END)
 
         self.game_over_rect = pygame.Rect(50, 50, 350, 100)
-        self.winner_rect = pygame.Rect(50, 350, 350, 100)
-        self.circle_black = pygame.Rect(62.5, 200, 100, 100)
-        self.circle_white = pygame.Rect(287.5, 200, 100, 100)
+        self.winner_rect = pygame.Rect(50, 400, 350, 100)
+        self.circle_black = pygame.Rect(62.5, 228, 100, 100)
+        self.circle_white = pygame.Rect(287.5, 228, 100, 100)
 
     def draw(self):
         """Оптимизированная отрисовка доски, очков и камней на экране"""
@@ -30,20 +30,20 @@ class End:
         self.screen.blit(text_surface, text_rect)  # Отображаем текст по центру кнопки
 
         # СЧЁТ ЧЕРНЫХ
-        pygame.draw.circle(self.screen, cfg.BLACK_STONE_COLOR, (cfg.WINDOW_WIDTH/4, 250), 50)
+        pygame.draw.circle(self.screen, cfg.BLACK_STONE_COLOR, (cfg.WINDOW_WIDTH/4, 278), 50)
         text_surface = self.font.render(f'{self.black_score}', True, cfg.WHITE)
         text_rect = text_surface.get_rect(center=self.circle_black.center)
         self.screen.blit(text_surface, text_rect)
 
         # СЧЁТ БЕЛЫХ
-        pygame.draw.circle(self.screen, cfg.WHITE_STONE_COLOR, (cfg.WINDOW_WIDTH - cfg.WINDOW_WIDTH/4, 250), 50)
+        pygame.draw.circle(self.screen, cfg.WHITE_STONE_COLOR, (cfg.WINDOW_WIDTH - cfg.WINDOW_WIDTH/4, 278), 50)
         text_surface = self.font.render(f'{self.white_score}', True, cfg.BLACK)
         text_rect = text_surface.get_rect(center=self.circle_white.center)
         self.screen.blit(text_surface, text_rect)
 
         # ДВОЕТОЧИЕ
-        pygame.draw.circle(self.screen, cfg.BLACK, (cfg.WINDOW_WIDTH/2, 235), 2)
-        pygame.draw.circle(self.screen, cfg.BLACK, (cfg.WINDOW_WIDTH/2, 265), 2)
+        pygame.draw.circle(self.screen, cfg.BLACK, (cfg.WINDOW_WIDTH/2, 263), 2)
+        pygame.draw.circle(self.screen, cfg.BLACK, (cfg.WINDOW_WIDTH/2, 293), 2)
 
         # ПРЯМОУГОЛЬНИК "ПОБЕДА <player>"
         pygame.draw.rect(self.screen, cfg.BUTTON_COLOR, self.winner_rect)  # Рисуем прямоугольник
@@ -72,5 +72,5 @@ def show_end(black_score, white_score):
         pygame.display.flip()
 
 
-if __name__ == "__main__":
-    show_end(5, 5)
+# if __name__ == "__main__":
+#     show_end(5, 5)
