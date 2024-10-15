@@ -22,6 +22,7 @@ class StartMenu:
         pygame.display.set_caption("Go Game menu")  # Название окна
         self.font = pygame.font.Font(None, FONT_SIZE)
         self.get_bord_size_input = InputBox(10, 210, 100, 40, "3")
+        self.get_bot_hard_input = InputBox(10, 310, 100, 40, "0")
 
     def draw(self):
         """Оптимизированная отрисовка доски, очков и камней на экране"""
@@ -36,10 +37,17 @@ class StartMenu:
     def get_bord_size(self):
         return self.get_bord_size_input.text
 
+    def get_bot_hard(self):
+        return self.get_bot_hard_input.text
+
     def draw_settings(self):
         black_text = self.font.render(f'Размер Поля', True, TEXT_COLOR)
         self.screen.blit(black_text, (10, 160))
         self.get_bord_size_input.draw(self.screen)
+
+        black_text = self.font.render(f'Сложность бота(0-1)', True, TEXT_COLOR)
+        self.screen.blit(black_text, (10, 260))
+        self.get_bot_hard_input.draw(self.screen)
 
     def draw_buttons(self):
         """Отрисовка кнопок"""
@@ -62,6 +70,7 @@ class StartMenu:
 @dataclass
 class Settings:
     state: str  # "single"|"multi"|"quit"
+    bot_hard: int = 0
     bord_size: int = 9
 
 
@@ -84,11 +93,11 @@ def show_menu():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button_rect_single.collidepoint(event.pos):
-                    return Settings("single", int(menu.get_bord_size()))
+                    return Settings("single", int(menu.get_bot_hard()), int(menu.get_bord_size()))
                 if start_button_rect_multi.collidepoint(event.pos):
-                    return Settings("multi", int(menu.get_bord_size()))
+                    return Settings("multi", int(menu.get_bot_hard()), int(menu.get_bord_size()))
                 if start_button_rect_exit.collidepoint(event.pos):
-                    return Settings("exit", int(menu.get_bord_size()))
+                    return Settings("exit", int(menu.get_bot_hard()), int(menu.get_bord_size()))
 
         menu.draw()
         pygame.display.flip()

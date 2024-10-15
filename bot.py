@@ -18,7 +18,7 @@ def get_possible_moves(bord):
     return possible_moves
 
 
-def get_random_move(board):
+def get_random_move(board, player):
     moves = get_possible_moves(board)
     return random.choice(moves)
 
@@ -85,3 +85,6 @@ def get_deep_move(board, player, deep=2, alpha=-10, beta=10):
 
 
     return best_move[1]
+
+
+bots = [get_random_move, get_deep_move]

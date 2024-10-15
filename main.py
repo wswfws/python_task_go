@@ -5,7 +5,7 @@ import configuration as cfg
 
 from go_game_logic import GoGameLogic
 from go_game_gui import GoGameGUI
-from bot import get_deep_move
+from bot import bots
 from menu_window import show_menu, Settings
 from game_over_window import show_end
 
@@ -49,7 +49,8 @@ def main(_settings: Settings):
                 col = x // bordConfig.GRID_CELL_SIZE()
                 if 0 <= row < _settings.bord_size and 0 <= col < _settings.bord_size:
                     if board_logic.place_stone(row, col) and _settings.state == "single":
-                        board_logic.place_stone(*get_deep_move(board_logic.board, board_logic.current_player))
+                        board_logic.place_stone(
+                            *bots[_settings.bot_hard](board_logic.board, board_logic.current_player))
 
                 if pass_button_rect.collidepoint(event.pos):
                     board_logic.pass_move()
