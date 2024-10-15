@@ -9,6 +9,7 @@ class GoGameLogic:
     white_score = 0
     pass_count = 0  # Количество подряд идущих пасов
     game_over = False
+    stones = 0
 
     def __init__(self, size, bord_config: BoardConfig, board=None, fake=False):
         self.size = size
@@ -46,6 +47,8 @@ class GoGameLogic:
         # Смена текущего игрока
         self.current_player = 'W' if self.current_player == 'B' else 'B'
         self.check_capture(row, col, self.current_player)
+
+        self.stones+=1
 
         return True
 

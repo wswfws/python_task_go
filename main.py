@@ -1,4 +1,6 @@
+import asyncio
 import sys
+import time
 import webbrowser
 import pygame
 import configuration as cfg
@@ -8,6 +10,7 @@ from go_game_gui import GoGameGUI
 from bot import bots
 from menu_window import show_menu, Settings
 from game_over_window import show_end
+from onlineGo.main import set_stone, get_game_stones, get_jwt
 
 bordConfig = cfg.BoardConfig()
 
@@ -31,7 +34,7 @@ question_button_rect = pygame.Rect(
 game_rules_rect = pygame.Rect(0, cfg.WINDOW_HEIGHT - 50, cfg.WINDOW_WIDTH, 25)
 
 
-def main(_settings: Settings):
+async def main(_settings: Settings):
     """
     Основная функция для запуска игры"""
     board_logic = GoGameLogic(_settings.bord_size, bordConfig)
@@ -53,7 +56,13 @@ def main(_settings: Settings):
                         board_logic.place_stone(
                             *bots[_settings.bot_hard](board_logic.board, board_logic.current_player))
                     if normal_move and _settings.state == "online":
-                        pass
+                        jwt = get_jwt()
+                        await set_stone(cfg.game_id, (col, row), jwt)
+                        stones = get_game_stones(cfg.game_id)
+                        while len(stones) != board_logic.stones + 1:
+                            time.sleep(0.1)
+                            stones = get_game_stones(cfg.game_id)
+                        board_logic.place_stone(stones[-1][1], stones[-1][0])
 
                 if pass_button_rect.collidepoint(event.pos):
                     board_logic.pass_move()
@@ -79,4 +88,4 @@ if __name__ == "__main__":
     bordConfig.BOARD_SIZE = settings.bord_size
     if settings.state == "exit":
         exit()
-    main(settings)
+    asyncio.run(main(settings))

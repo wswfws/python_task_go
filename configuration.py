@@ -2,7 +2,8 @@
 WINDOW_WIDTH = 450
 WINDOW_HEIGHT = 570
 
-sessionid = "get it from cookies" #not commit
+sessionid = "" #not commit
+game_id = 68664722
 
 
 class BoardConfig:

@@ -50,6 +50,7 @@ async def set_stone(id: int, move: (int, int), jwt):
         while True:
             message = await ws.recv()
             message = json.loads(message)
+            print(message)
             if message[0] == "net/pong":
                 break
 
