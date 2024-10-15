@@ -21,7 +21,7 @@ class StartMenu:
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))  # Создание окна
         pygame.display.set_caption("Go Game menu")  # Название окна
         self.font = pygame.font.Font(None, FONT_SIZE)
-        self.get_bord_size_input = InputBox(10, 210, 100, 40, "9")
+        self.get_bord_size_input = InputBox(10, 210, 100, 40, "3")
 
     def draw(self):
         """Оптимизированная отрисовка доски, очков и камней на экране"""
