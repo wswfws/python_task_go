@@ -49,7 +49,7 @@ def get_deep_move(board, player, deep=2, alpha=-10, beta=10):
 
     # Сортируем ходы для более раннего отсечения
     moves = sorted(moves, key=lambda move: heuristic_move(board, move, player))
-    best_move = (alpha, get_random_move(board))  # Инициализация лучшего хода
+    best_move = (alpha, get_random_move(board, player))  # Инициализация лучшего хода
 
     for move in moves:
         if deep == 1:
