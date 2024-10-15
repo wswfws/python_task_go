@@ -33,6 +33,7 @@ class StartMenu:
 
     def handle_event(self, event):
         self.get_bord_size_input.handle_event(event)
+        self.get_bot_hard_input.handle_event(event)
 
     def get_bord_size(self):
         return self.get_bord_size_input.text
