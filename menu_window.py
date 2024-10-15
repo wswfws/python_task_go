@@ -13,6 +13,7 @@ from configuration import (
 start_button_rect_single = pygame.Rect(10, 10, 200, 40)
 start_button_rect_multi = pygame.Rect(10, 60, 200, 40)
 start_button_rect_exit = pygame.Rect(10, 110, 200, 40)
+start_button_rect_online = pygame.Rect(10, 310, 200, 40)
 
 
 class StartMenu:
@@ -62,6 +63,11 @@ class StartMenu:
         text_rect = text_surface.get_rect(center=start_button_rect_multi.center)
         self.screen.blit(text_surface, text_rect)  # Отображаем текст по центру кнопки
 
+        pygame.draw.rect(self.screen, BUTTON_COLOR, start_button_rect_online)  # Рисуем прямоугольник кнопки
+        text_surface = self.font.render("Игра онлайн", True, TEXT_COLOR)
+        text_rect = text_surface.get_rect(center=start_button_rect_online.center)
+        self.screen.blit(text_surface, text_rect)  # Отображаем текст по центру кнопки
+
         pygame.draw.rect(self.screen, RED, start_button_rect_exit)  # Рисуем прямоугольник кнопки
         text_surface = self.font.render("Выйти", True, TEXT_COLOR)
         text_rect = text_surface.get_rect(center=start_button_rect_exit.center)
@@ -70,7 +76,7 @@ class StartMenu:
 
 @dataclass
 class Settings:
-    state: str  # "single"|"multi"|"quit"
+    state: str  # "single"|"multi"|"quit"|"online"
     bot_hard: int = 0
     bord_size: int = 9
 
@@ -95,6 +101,8 @@ def show_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button_rect_single.collidepoint(event.pos):
                     return Settings("single", int(menu.get_bot_hard()), int(menu.get_bord_size()))
+                if start_button_rect_online.collidepoint(event.pos):
+                    return Settings("online", int(menu.get_bot_hard()), int(menu.get_bord_size()))
                 if start_button_rect_multi.collidepoint(event.pos):
                     return Settings("multi", int(menu.get_bot_hard()), int(menu.get_bord_size()))
                 if start_button_rect_exit.collidepoint(event.pos):

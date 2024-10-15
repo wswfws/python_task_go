@@ -2,6 +2,8 @@
 WINDOW_WIDTH = 450
 WINDOW_HEIGHT = 570
 
+sessionid = "get it from cookies" #not commit
+
 
 class BoardConfig:
     def __init__(self):

@@ -48,9 +48,12 @@ def main(_settings: Settings):
                 row = y // bordConfig.GRID_CELL_SIZE()
                 col = x // bordConfig.GRID_CELL_SIZE()
                 if 0 <= row < _settings.bord_size and 0 <= col < _settings.bord_size:
-                    if board_logic.place_stone(row, col) and _settings.state == "single":
+                    normal_move = board_logic.place_stone(row, col)
+                    if normal_move and _settings.state == "single":
                         board_logic.place_stone(
                             *bots[_settings.bot_hard](board_logic.board, board_logic.current_player))
+                    if normal_move and _settings.state == "online":
+                        pass
 
                 if pass_button_rect.collidepoint(event.pos):
                     board_logic.pass_move()
