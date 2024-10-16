@@ -9,7 +9,7 @@ class GoGameLogic:
     white_score = 0
     pass_count = 0  # Количество подряд идущих пасов
     game_over = False
-    stones = 0
+    moves = 0
 
     def __init__(self, size, bord_config: BoardConfig, board=None, fake=False):
         self.size = size
@@ -26,6 +26,10 @@ class GoGameLogic:
 
     def place_stone(self, row, col):
         """Размещение камня на доске и проверка захвата камней противника"""
+        if row == col == -1:
+            self.pass_move()
+            return True
+
         if not self.is_in_bounds(row, col) or self.board[row][col] != '.':
             return False
 
@@ -48,12 +52,13 @@ class GoGameLogic:
         self.current_player = 'W' if self.current_player == 'B' else 'B'
         self.check_capture(row, col, self.current_player)
 
-        self.stones+=1
+        self.moves += 1
 
         return True
 
     def pass_move(self):
         """Игрок совершает пас."""
+        self.moves += 1
         self.pass_count += 1
         if self.current_player == 'B':
             self.black_score += 1
@@ -121,8 +126,8 @@ class GoGameLogic:
     def end_game(self):
         """Завершение игры и подсчет очков."""
         self.game_over = True
-        self.black_score = count_chinese_score(self.board)[0]
-        self.white_score = count_chinese_score(self.board)[1]
+        self.black_score += count_chinese_score(self.board)[0]
+        self.white_score += count_chinese_score(self.board)[1]
         print("Игра закончена. Подсчет очков...")
         print("Очки черных:", self.black_score)
         print("Очки белых:", self.white_score)
